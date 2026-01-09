@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSX Analytics | Premium Evaluation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* Luxury Dark Palette */
+            --bg-main: #030303;
+            --bg-card: #0a0a0a;
+            --bg-input: #111111;
+
+            /* Accents */
+            --gold-primary: #D4AF37;
+            --gold-light: #F4DF89;
+            --gold-dim: #8a7020;
+
+            --success: #34d399;
+            --danger: #f87171;
+
+            /* Text */
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #444444;
+
+            /* Borders */
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-focus: rgba(212, 175, 55, 0.5);
+
+            /* Effects */
+            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #aa892c 100%);
+            --glass: blur(20px);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                linear-gradient(to bottom, transparent, #030303 20%);
+        }
+
+        /* Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            width: 100%;
+            max-width: 1600px;
+            height: 100vh;
+        }
+
+        /* Typography Styles */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+        }
+
+        .mono {
+            font-family: 'Space Grotesk', monospace;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-subtle);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--gold-primary);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand span {
+            color: white;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            height: 1px;
+            flex: 1;
+            background: var(--border-subtle);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            color: white;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
+            background: black;
+        }
+
+        .spacer {
+            height: 10px;
+        }
+
+        /* Button */
+        .btn-evaluate {
+            margin-top: 20px;
+            background: var(--gradient-gold);
+            color: black;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .btn-evaluate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px -5px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- DASHBOARD --- */
+        .dashboard {
+            padding: 40px 60px;
+            overflow-y: auto;
+            position: relative;
+            background: radial-gradient(circle at top right, #111 0%, #030303 40%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Empty State */
+        .empty-state {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.2;
+            color: var(--gold-primary);
+        }
+
+        /* Results UI */
+        .company-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 30px;
+        }
+
+        .company-title h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: white;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .company-meta {
+            color: var(--gold-primary);
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .score-block {
+            text-align: right;
+        }
+
+        .score-big {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+        }
+
+        .score-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .bento-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .bento-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .bento-card.wide {
+            grid-column: span 2;
+        }
+
+        .bento-card.full {
+            grid-column: span 3;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+            border-color: rgba(212, 175, 55, 0.15);
+        }
+
+        .card-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Metric Lines */
+        .metric-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .metric-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .m-keys {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .m-vals {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .rec-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .rec-badge {
+            background: var(--gold-primary);
+            color: black;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .rec-text {
+            font-family: 'Space Grotesk', serif;
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+
+        /* Mobile logic */
+        @media (max-width: 1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                display: block;
+            }
+
+            .sidebar {
+                max-height: none;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-subtle);
+                padding-bottom: 40px;
+            }
+
+            .dashboard {
+                padding: 30px;
+                height: auto;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bento-card.wide,
+            .bento-card.full {
+                grid-column: span 1;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span style="font-size:1.2em">⟡</span> PSX <span>PREMIUM</span>
+            </div>
+
+            <!-- IDENTITY -->
+            <div class="form-section">
+                <div class="section-label">01. Identity</div>
+                <div class="input-group">
+                    <label>Ticker Symbol</label>
+                    <input type="text" id="companyName" placeholder="e.g. ENGRO">
+                </div>
+                <div class="input-group">
+                    <label>Price (PKR)</label>
+                    <input type="number" id="currentPrice" step="0.01" placeholder="0.00">
+                </div>
+            </div>
+
+            <!-- VALUATION -->
+            <div class="form-section">
+                <div class="section-label">02. Valuation</div>
+                <div class="input-row">
+                    <div class="input-group"><label>P/E Ratio</label><input type="number" id="peRatio" step="0.01"
+                            placeholder="0.00"></div>
+                    <div class="input-group"><label>P/B Ratio</label><input type="number" id="pbRatio" step="0.01"
+                            placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <!-- PROFITABILITY -->
+            <div class="form-section">
+                <div class="section-label">03. Profitability & Margins</div>
+                <div class="input-row">
+                    <div class="input-group"><label>ROE %</label><input type="number" id="roe" step="0.01"
+                            placeholder="0.00"></div>
+                    <div class="input-group"><label>ROA %</label><input type="number" id="roa" step="0.01"
+                            placeholder="0.00"></div>
+                </div>
+                <div class="input-group"><label>EPS (PKR)</label><input type="number" id="eps" step="0.01"
+                        placeholder="0.00"></div>
+                <div class="spacer"></div>
+                <div class="input-group"><label>Gross Margin %</label><input type="number" id="grossMargin" step="0.01"
+                        placeholder="0.00"></div>
+                <div class="input-row">
+                    <div class="input-group"><label>Op. Margin %</label><input type="number" id="operatingMargin"
+                            step="0.01" placeholder="0.00"></div>
+                    <div class="input-group"><label>Net Margin %</label><input type="number" id="netMargin" step="0.01"
+                            placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <!-- HEALTH -->
+            <div class="form-section">
+                <div class="section-label">04. Financial Health</div>
+                <div class="input-row">
+                    <div class="input-group"><label>Debt/Equity</label><input type="number" id="debtToEquity"
+                            step="0.01" placeholder="0.00"></div>
+                    <div class="input-group"><label>Current Ratio</label><input type="number" id="currentRatio"
+                            step="0.01" placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <!-- GROWTH -->
+            <div class="form-section">
+                <div class="section-label">05. Growth Metrics</div>
+                <div class="input-row">
+                    <div class="input-group"><label>EPS 1Y %</label><input type="number" id="epsGrowth1Y" step="0.01"
+                            placeholder="0.00"></div>
+                    <div class="input-group"><label>EPS 5Y %</label><input type="number" id="epsGrowth5Y" step="0.01"
+                            placeholder="0.00"></div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group"><label>Rev 1Y %</label><input type="number" id="revenueGrowth1Y"
+                            step="0.01" placeholder="0.00"></div>
+                    <div class="input-group"><label>Rev 5Y %</label><input type="number" id="revenueGrowth5Y"
+                            step="0.01" placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <!-- DIVIDENDS -->
+            <div class="form-section">
+                <div class="section-label">06. Dividends</div>
+                <div class="input-row">
+                    <div class="input-group"><label>Yield %</label><input type="number" id="dividendYield" step="0.01"
+                            placeholder="0.00"></div>
+                    <div class="input-group"><label>Payout %</label><input type="number" id="payoutRatio" step="0.01"
+                            placeholder="0.00"></div>
+                </div>
+            </div>
+
+            <button class="btn-evaluate" onclick="runAnalysis()">GENERATE PREMIUM REPORT</button>
+        </aside>
+
+        <!-- DASHBOARD -->
+        <main class="dashboard">
+            <div class="content-wrapper">
+
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">⟡</div>
+                    <h3>Ready for Analysis</h3>
+                    <p>Enter comprehensive market data to generate a detailed valuation report.</p>
+                </div>
+
+                <div id="reportContent" class="hidden">
+
+                    <header class="company-header fade-in">
+                        <div class="company-title">
+                            <h1 id="r_name">--</h1>
+                            <div class="company-meta" id="r_price">PKR --</div>
+                        </div>
+                        <div class="score-block">
+                            <div class="score-big" id="r_score">0</div>
+                            <div class="score-label">Intrinsix Score™</div>
+                        </div>
+                    </header>
+
+                    <section class="bento-grid">
+
+                        <!-- VERDICT -->
+                        <div class="bento-card full fade-in" style="animation-delay: 0.1s">
+                            <div class="card-title">Investment Verdict</div>
+                            <div class="rec-banner">
+                                <span class="rec-badge" id="r_verdict">--</span>
+                                <span class="rec-text" id="r_summary">--</span>
+                            </div>
+                        </div>
+
+                        <!-- VALUATION -->
+                        <div class="bento-card fade-in" style="animation-delay: 0.2s">
+                            <div class="card-title">Valuation</div>
+                            <div class="metric-line">
+                                <span class="m-keys">P/E Ratio</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_pe">--</span><span class="status-dot" id="dot_pe"></span></div>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">P/B Ratio</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_pb">--</span><span class="status-dot" id="dot_pb"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- PROFITABILITY -->
+                        <div class="bento-card fade-in" style="animation-delay: 0.3s">
+                            <div class="card-title">Profit Efficiency</div>
+                            <div class="metric-line">
+                                <span class="m-keys">ROE</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_roe">--</span><span class="status-dot" id="dot_roe"></span></div>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">ROA</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_roa">--</span><span class="status-dot" id="dot_roa"></span></div>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">EPS</span>
+                                <span class="m-vals" id="r_eps">--</span>
+                            </div>
+                        </div>
+
+                        <!-- MARGINS -->
+                        <div class="bento-card fade-in" style="animation-delay: 0.35s">
+                            <div class="card-title">Margins</div>
+                            <div class="metric-line">
+                                <span class="m-keys">Gross</span>
+                                <span class="m-vals" id="r_gross">--</span>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">Operating</span>
+                                <span class="m-vals" id="r_op">--</span>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">Net</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_net">--</span><span class="status-dot" id="dot_net"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- HEALTH -->
+                        <div class="bento-card fade-in" style="animation-delay: 0.4s">
+                            <div class="card-title">Balance Sheet</div>
+                            <div class="metric-line">
+                                <span class="m-keys">Debt/Equity</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_debt">--</span><span class="status-dot" id="dot_debt"></span></div>
+                            </div>
+                            <div class="metric-line">
+                                <span class="m-keys">Current Ratio</span>
+                                <div style="display:flex; align-items:center"><span class="m-vals"
+                                        id="r_cr">--</span><span class="status-dot" id="dot_cr"></span></div>
+                            </div>
+                        </div>
+
+                        <!-- GROWTH -->
+                        <div class="bento-card wide fade-in" style="animation-delay: 0.5s">
+                            <div class="card-title">Growth Trajectory</div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div>
+                                    <div class="section-label"
+                                        style="margin-bottom:10px; border:none; color:var(--text-muted)">Earnings (EPS)
+                                    </div>
+                                    <div class="metric-line">
+                                        <span class="m-keys">1 Year</span>
+                                        <span class="m-vals" id="r_g_eps1">--</span>
+                                    </div>
+                                    <div class="metric-line">
+                                        <span class="m-keys">5 Year (CAGR)</span>
+                                        <div style="display:flex; align-items:center"><span class="m-vals"
+                                                id="r_g_eps5">--</span><span class="status-dot" id="dot_g_eps"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="section-label"
+                                        style="margin-bottom:10px; border:none; color:var(--text-muted)">Revenue</div>
+                                    <div class="metric-line">
+                                        <span class="m-keys">1 Year</span>
+                                        <span class="m-vals" id="r_g_rev1">--</span>
+                                    </div>
+                                    <div class="metric-line">
+                                        <span class="m-keys">5 Year (CAGR)</span>
+                                        <div style="display:flex; align-items:center"><span class="m-vals"
+                                                id="r_g_rev5">--</span><span class="status-dot" id="dot_g_rev"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DIVIDENDS -->
+                        <div class="bento-card fade-in" style="animation-delay: 0.6s">
+                            <div class="card-title">Income</div>
+                            <div style="display:flex; flex-direction:column; gap:10px">
+                                <div>
+                                    <div class="m-keys">Annual Yield</div>
+                                    <div class="m-vals"
+                                        style="font-size:1.8rem; margin-top:5px; color: var(--gold-light)" id="r_yield">
+                                        --%</div>
+                                </div>
+                                <div class="metric-line">
+                                    <span class="m-keys">Payout Ratio</span>
+                                    <span class="m-vals" id="r_payout">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function runAnalysis() {
+            document.getElementById('emptyState').classList.add('hidden');
+            const report = document.getElementById('reportContent');
+            report.classList.remove('hidden');
+
+            report.querySelectorAll('.fade-in').forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight;
+                el.style.animation = null;
+            });
+
+            const val = (id) => parseFloat(document.getElementById(id).value) || 0;
+            const txt = (id) => document.getElementById(id).value;
+
+            const data = {
+                name: txt('companyName') || 'TICKER',
+                price: val('currentPrice'),
+                pe: val('peRatio'),
+                pb: val('pbRatio'),
+                roe: val('roe'),
+                roa: val('roa'),
+                eps: val('eps'),
+                gross: val('grossMargin'),
+                op: val('operatingMargin'),
+                net: val('netMargin'),
+                debt: val('debtToEquity'),
+                cr: val('currentRatio'),
+                epsG1: val('epsGrowth1Y'),
+                epsG5: val('epsGrowth5Y'),
+                revG1: val('revenueGrowth1Y'),
+                revG5: val('revenueGrowth5Y'),
+                yield: val('dividendYield'),
+                payout: val('payoutRatio')
+            };
+
+            let score = 0;
+
+            // Valuation (Max 20)
+            if (data.pe > 0 && data.pe < 12) score += 12;
+            else if (data.pe <= 20) score += 8;
+            if (data.pb < 1.2) score += 8;
+            else if (data.pb < 2.5) score += 4;
+
+            // Profitability (Max 25)
+            if (data.roe > 15) score += 10;
+            else if (data.roe > 10) score += 5;
+            if (data.roa > 8) score += 5;
+            if (data.net > 10) score += 10;
+
+            // Health (Max 15)
+            if (data.debt < 0.5) score += 10;
+            else if (data.debt < 1.0) score += 5;
+            if (data.cr > 1.2) score += 5;
+
+            // Growth (Max 25)
+            if (data.epsG5 > 15) score += 15;
+            else if (data.epsG5 > 8) score += 8;
+            if (data.revG5 > 10) score += 10;
+
+            // Dividends (Max 15)
+            if (data.yield > 6) score += 15;
+            else if (data.yield > 3) score += 8;
+
+            score = Math.min(100, score);
+
+            document.getElementById('r_name').innerText = data.name.toUpperCase();
+            document.getElementById('r_price').innerText = `PKR ${data.price.toFixed(2)}`;
+            document.getElementById('r_score').innerText = score;
+
+            let verdict = "HOLD";
+            let summary = "Balanced profile with mixed indicators.";
+            let vColor = "#F4DF89";
+
+            if (score >= 80) {
+                verdict = "STRONG BUY";
+                summary = "Exceptional fundamentals across all key metrics.";
+                vColor = "#34d399";
+            } else if (score >= 65) {
+                verdict = "BUY";
+                summary = "Solid performance with minor areas for improvement.";
+                vColor = "#34d399";
+            } else if (score <= 35) {
+                verdict = "SELL";
+                summary = "Significant risks detected in financial health.";
+                vColor = "#f87171";
+            }
+
+            const verdictEl = document.getElementById('r_verdict');
+            verdictEl.innerText = verdict;
+            verdictEl.style.backgroundColor = vColor;
+            verdictEl.style.color = (score >= 65 || score <= 35) ? '#000' : '#000';
+            document.getElementById('r_summary').innerText = summary;
+
+            const updateMetric = (idText, val, idDot, condition) => {
+                document.getElementById(idText).innerText = val;
+                if (idDot) {
+                    const dot = document.getElementById(idDot);
+                    dot.style.backgroundColor = condition ? 'var(--success)' : 'var(--danger)';
+                    if (!condition && parseFloat(val) === 0) dot.style.backgroundColor = 'gray';
+                }
+            };
+
+            updateMetric('r_pe', data.pe.toFixed(2), 'dot_pe', data.pe < 20 && data.pe > 0);
+            updateMetric('r_pb', data.pb.toFixed(2), 'dot_pb', data.pb < 2);
+            updateMetric('r_roe', data.roe.toFixed(2) + '%', 'dot_roe', data.roe > 12);
+            updateMetric('r_roa', data.roa.toFixed(2) + '%', 'dot_roa', data.roa > 8);
+            document.getElementById('r_eps').innerText = data.eps.toFixed(2);
+            document.getElementById('r_gross').innerText = data.gross.toFixed(2) + '%';
+            document.getElementById('r_op').innerText = data.op.toFixed(2) + '%';
+            updateMetric('r_net', data.net.toFixed(2) + '%', 'dot_net', data.net > 10);
+            updateMetric('r_debt', data.debt.toFixed(2), 'dot_debt', data.debt < 1);
+            updateMetric('r_cr', data.cr.toFixed(2), 'dot_cr', data.cr > 1.2);
+            document.getElementById('r_g_eps1').innerText = data.epsG1.toFixed(2) + '%';
+            updateMetric('r_g_eps5', data.epsG5.toFixed(2) + '%', 'dot_g_eps', data.epsG5 > 10);
+            document.getElementById('r_g_rev1').innerText = data.revG1.toFixed(2) + '%';
+            updateMetric('r_g_rev5', data.revG5.toFixed(2) + '%', 'dot_g_rev', data.revG5 > 10);
+            document.getElementById('r_yield').innerText = data.yield.toFixed(2) + '%';
+            document.getElementById('r_payout').innerText = data.payout.toFixed(2) + '%';
+        }
+    </script>
+</body>
+
+</html>
