@@ -2,136 +2,86 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSX Analytics | Premium Evaluation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>PSX Stock Analyzer | Phase 2 Advanced</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" />
 
     <style>
         :root {
-            /* Luxury Dark Palette */
             --bg-main: #030303;
             --bg-card: #0a0a0a;
             --bg-input: #111111;
 
-            /* Accents */
             --gold-primary: #D4AF37;
             --gold-light: #F4DF89;
-            --gold-dim: #8a7020;
 
             --success: #34d399;
+            --warning: #fbbf24;
             --danger: #f87171;
 
-            /* Text */
             --text-primary: #ffffff;
             --text-secondary: #888888;
             --text-muted: #444444;
 
-            /* Borders */
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-focus: rgba(212, 175, 55, 0.5);
-
-            /* Effects */
-            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #aa892c 100%);
-            --glass: blur(20px);
+            --border-subtle: rgba(255, 255, 255, .08);
         }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
             background-color: var(--bg-main);
             color: var(--text-primary);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
-                linear-gradient(to bottom, transparent, #030303 20%);
-        }
-
-        /* Texture Overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1000;
+            background-image: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, .08) 0%, transparent 40%);
         }
 
         .main-layout {
             display: grid;
-            grid-template-columns: 340px 1fr;
-            width: 100%;
-            max-width: 1600px;
-            height: 100vh;
+            grid-template-columns: 390px 1fr;
+            max-width: 1850px;
+            margin: 0 auto;
         }
 
-        /* Typography Styles */
-        h1,
-        h2,
-        h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            margin: 0;
-        }
-
-        .mono {
-            font-family: 'Space Grotesk', monospace;
-            letter-spacing: -0.02em;
-        }
-
-        /* --- SIDEBAR --- */
         .sidebar {
             background: var(--bg-card);
             border-right: 1px solid var(--border-subtle);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
+            padding: 28px;
+            height: 100vh;
             overflow-y: auto;
-            position: relative;
-            z-index: 10;
         }
 
         .brand {
             font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
             color: var(--gold-primary);
-            margin-bottom: 30px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-
-        .brand span {
-            color: white;
+            gap: 10px;
         }
 
         .form-section {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 22px;
         }
 
         .section-label {
-            font-size: 0.7rem;
+            font-size: .7rem;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: .15em;
             color: var(--text-muted);
-            margin-bottom: 15px;
-            font-weight: 600;
+            margin-bottom: 12px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -158,73 +108,233 @@
 
         .input-group label {
             display: block;
-            font-size: 0.75rem;
+            font-size: .75rem;
             color: var(--text-secondary);
             margin-bottom: 6px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        input {
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-wrapper input[type="number"],
+        .input-wrapper input[type="text"],
+        .input-wrapper select {
+            flex: 1;
+        }
+
+        .na-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .na-checkbox {
+            display: none;
+        }
+
+        .na-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 10px;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            cursor: pointer;
+            user-select: none;
+            transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .na-label::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, .15) 0%, rgba(212, 175, 55, .05) 100%);
+            opacity: 0;
+            transition: opacity .25s ease;
+        }
+
+        .na-label:hover {
+            border-color: rgba(212, 175, 55, .3);
+            background: rgba(255, 255, 255, .05);
+            transform: translateY(-1px);
+        }
+
+        .na-label:hover::before {
+            opacity: 1;
+        }
+
+        .na-checkbox:checked+.na-label {
+            color: #000;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 100%);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, .15),
+                0 2px 8px rgba(212, 175, 55, .3);
+        }
+
+        .na-checkbox:checked+.na-label::before {
+            opacity: 0;
+        }
+
+        @keyframes checkPop {
+            0% {
+                transform: scale(0) rotate(-45deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2) rotate(5deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .input-wrapper.na-active input,
+        .input-wrapper.na-active select {
+            opacity: 0.35;
+            pointer-events: none;
+            background: rgba(0, 0, 0, .3);
+            border-color: rgba(255, 255, 255, .04);
+            position: relative;
+        }
+
+        input,
+        select {
             width: 100%;
             background: var(--bg-input);
             border: 1px solid var(--border-subtle);
-            color: white;
+            color: #fff;
             padding: 10px 12px;
-            border-radius: 6px;
+            border-radius: 7px;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            font-size: .92rem;
+            transition: all .25s ease;
         }
 
-        input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--gold-primary);
-            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
-            background: black;
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, .2);
         }
 
-        .spacer {
-            height: 10px;
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 12px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .02);
+            margin: 12px 0 18px;
         }
 
-        /* Button */
+        .toggle-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .toggle-title {
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: .01em;
+            font-size: .92rem;
+        }
+
+        .toggle-sub {
+            color: var(--text-secondary);
+            font-size: .78rem;
+            line-height: 1.35;
+        }
+
+        .switch {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            flex: 0 0 auto;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #2a2a2a;
+            border: 1px solid var(--border-subtle);
+            transition: .2s;
+            border-radius: 999px;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff;
+            transition: .2s;
+            border-radius: 999px;
+        }
+
+        .switch input:checked+.slider {
+            background: rgba(212, 175, 55, .22);
+            border-color: rgba(212, 175, 55, .45);
+        }
+
+        .switch input:checked+.slider:before {
+            transform: translate(20px, -50%);
+            background: var(--gold-light);
+        }
+
         .btn-evaluate {
-            margin-top: 20px;
-            background: var(--gradient-gold);
-            color: black;
+            margin-top: 14px;
+            background: linear-gradient(135deg, #D4AF37 0%, #aa892c 100%);
+            color: #000;
             border: none;
             padding: 16px;
-            border-radius: 8px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: .95rem;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 10px 30px -5px rgba(212, 175, 55, 0.3);
-            margin-bottom: 30px;
+            width: 100%;
+            transition: transform .18s ease;
         }
 
         .btn-evaluate:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 40px -5px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- DASHBOARD --- */
+        .btn-evaluate:active {
+            transform: translateY(0px) scale(.99);
+        }
+
         .dashboard {
-            padding: 40px 60px;
+            padding: 38px 56px;
             overflow-y: auto;
-            position: relative;
-            background: radial-gradient(circle at top right, #111 0%, #030303 40%);
+            height: 100vh;
         }
 
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        /* Empty State */
         .empty-state {
             height: 80vh;
             display: flex;
@@ -233,77 +343,190 @@
             justify-content: center;
             color: var(--text-muted);
             text-align: center;
+            gap: 10px;
         }
 
-        .empty-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.2;
-            color: var(--gold-primary);
+        .empty-state h3 {
+            color: #bbb;
+            font-weight: 700;
         }
 
-        /* Results UI */
+        .empty-state p {
+            color: var(--text-secondary);
+            max-width: 520px;
+        }
+
         .company-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 50px;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            padding-bottom: 26px;
             border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 30px;
+            gap: 20px;
         }
 
         .company-title h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 300;
-            color: white;
             line-height: 1;
             margin-bottom: 10px;
+            letter-spacing: -.02em;
         }
 
         .company-meta {
             color: var(--gold-primary);
             font-family: 'Space Grotesk', monospace;
-            font-size: 1.1rem;
-            opacity: 0.8;
+            font-size: 1.08rem;
+            opacity: .95;
         }
 
-        .score-block {
+        .score-display {
             text-align: right;
-        }
-
-        .score-big {
-            font-size: 4rem;
-            font-weight: 700;
-            color: white;
-            line-height: 1;
         }
 
         .score-label {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: .85rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: .12em;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        /* Bento Grid */
+        .score-big {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .badge-row {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 900;
+            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, .02);
+            color: #fff;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .pill .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #666;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .alert-box {
+            background: rgba(251, 191, 36, .1);
+            border: 1px solid var(--warning);
+            border-radius: 10px;
+            padding: 18px 18px;
+            margin-bottom: 26px;
+        }
+
+        .alert-title {
+            color: var(--warning);
+            font-weight: 900;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-list {
+            list-style: none;
+        }
+
+        .alert-list li {
+            padding: 7px 0;
+            color: #fcd34d;
+            font-size: .92rem;
+            line-height: 1.3;
+        }
+
+        .alert-list li::before {
+            content: "⚠ ";
+            margin-right: 8px;
+        }
+
+        .verdict-banner {
+            background: linear-gradient(145deg, rgba(212, 175, 55, .1) 0%, transparent 100%);
+            border: 1px solid rgba(212, 175, 55, .3);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 26px;
+        }
+
+        .verdict-badge {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            margin-bottom: 14px;
+            letter-spacing: .02em;
+        }
+
+        .verdict-text {
+            font-size: 1.06rem;
+            color: #d0d0d0;
+            line-height: 1.65;
+            margin-bottom: 10px;
+        }
+
+        .explanation-box {
+            background: rgba(255, 255, 255, .02);
+            border-left: 3px solid var(--gold-primary);
+            padding: 16px;
+            margin-top: 14px;
+            border-radius: 6px;
+        }
+
+        .explanation-title {
+            color: var(--gold-primary);
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-size: .9rem;
+        }
+
+        .explanation-text {
+            font-size: .86rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
+            gap: 18px;
+            margin-bottom: 24px;
         }
 
         .bento-card {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, .02);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s ease;
+            padding: 20px;
+            transition: all .25s ease;
         }
 
         .bento-card:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, .04);
             transform: translateY(-2px);
         }
 
@@ -313,94 +536,65 @@
 
         .bento-card.full {
             grid-column: span 3;
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
-            border-color: rgba(212, 175, 55, 0.15);
         }
 
         .card-title {
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: .8rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            letter-spacing: .1em;
+            margin-bottom: 16px;
+            font-weight: 900;
         }
 
-        /* Metric Lines */
         .metric-line {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            position: relative;
+            margin-bottom: 14px;
+            gap: 14px;
         }
 
-        .metric-line:last-child {
-            margin-bottom: 0;
-        }
-
-        .m-keys {
-            font-size: 0.9rem;
+        .m-key {
+            font-size: .9rem;
             color: #aaa;
         }
 
-        .m-vals {
+        .m-val {
             font-family: 'Space Grotesk', monospace;
-            font-size: 1.1rem;
-            color: white;
+            font-size: 1.05rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            display: inline-block;
-            margin-left: 10px;
             box-shadow: 0 0 10px currentColor;
         }
 
-        .rec-banner {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .hidden {
+            display: none !important;
         }
 
-        .rec-badge {
-            background: var(--gold-primary);
-            color: black;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .rec-text {
-            font-family: 'Space Grotesk', serif;
-            font-size: 1.2rem;
-            color: #ccc;
-        }
-
-        /* Mobile logic */
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
             .main-layout {
                 grid-template-columns: 1fr;
-                display: block;
             }
 
             .sidebar {
-                max-height: none;
                 height: auto;
                 border-right: none;
                 border-bottom: 1px solid var(--border-subtle);
-                padding-bottom: 40px;
             }
 
             .dashboard {
-                padding: 30px;
                 height: auto;
+                padding: 28px;
             }
 
             .bento-grid {
@@ -411,403 +605,1198 @@
             .bento-card.full {
                 grid-column: span 1;
             }
-        }
 
-        .hidden {
-            display: none;
-        }
+            .company-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-        .fade-in {
-            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+            .score-display {
+                text-align: left;
+            }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .badge-row {
+                justify-content: flex-start;
             }
         }
     </style>
 </head>
 
 <body>
-
     <div class="main-layout">
-        <!-- SIDEBAR -->
+        <!-- ================= SIDEBAR ================= -->
         <aside class="sidebar">
-            <div class="brand">
-                <span style="font-size:1.2em">⟡</span> PSX <span>PREMIUM</span>
+            <div class="brand">⟡ PSX ANALYZER</div>
+
+            <div class="toggle-wrap">
+                <div class="toggle-left">
+                    <div class="toggle-title">Advanced Mode</div>
+                    <div class="toggle-sub">Enable professional sector-specific metrics</div>
+                </div>
+                <label class="switch" title="Enable Advanced Sector Analysis">
+                    <input type="checkbox" id="advancedMode" />
+                    <span class="slider"></span>
+                </label>
             </div>
 
-            <!-- IDENTITY -->
+            <!-- Company Identity -->
             <div class="form-section">
-                <div class="section-label">01. Identity</div>
-                <div class="input-group">
+                <div class="section-label">Company Identity</div>
+
+                <div class="input-group" data-field="ticker">
                     <label>Ticker Symbol</label>
-                    <input type="text" id="companyName" placeholder="e.g. ENGRO">
+                    <input type="text" id="ticker" placeholder="e.g. ENGRO" />
                 </div>
-                <div class="input-group">
-                    <label>Price (PKR)</label>
-                    <input type="number" id="currentPrice" step="0.01" placeholder="0.00">
+
+                <div class="input-group" data-field="price">
+                    <label>Current Price (PKR)</label>
+                    <input type="number" id="price" step="0.01" placeholder="0.00" />
+                </div>
+
+                <div class="input-group" data-field="sector">
+                    <label>Sector / Industry</label>
+                    <select id="sector">
+                        <option value="">Select Sector</option>
+                        <option value="banking">Banking & Finance</option>
+                        <option value="cement">Cement</option>
+                        <option value="oil">Oil & Gas</option>
+                        <option value="fertilizer">Fertilizer</option>
+                        <option value="power">Power Generation (IPPs)</option>
+                        <option value="textile">Textile</option>
+                        <option value="pharma">Pharmaceutical</option>
+                        <option value="fmcg">FMCG</option>
+                        <option value="tech">Technology & Telecom</option>
+                        <option value="auto">Automobile</option>
+                        <option value="other">Other</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- VALUATION -->
+            <!-- Core Metrics -->
             <div class="form-section">
-                <div class="section-label">02. Valuation</div>
+                <div class="section-label">Core Valuation</div>
                 <div class="input-row">
-                    <div class="input-group"><label>P/E Ratio</label><input type="number" id="peRatio" step="0.01"
-                            placeholder="0.00"></div>
-                    <div class="input-group"><label>P/B Ratio</label><input type="number" id="pbRatio" step="0.01"
-                            placeholder="0.00"></div>
+                    <div class="input-group" data-field="pe">
+                        <label>P/E Ratio</label>
+                        <input type="number" id="pe" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="pb">
+                        <label>P/B Ratio</label>
+                        <input type="number" id="pb" step="0.01" placeholder="0.00" />
+                    </div>
+                </div>
+
+                <div class="input-group" data-field="bookValue">
+                    <label>Book Value / Share (PKR)</label>
+                    <input type="number" id="bookValue" step="0.01" placeholder="0.00" />
                 </div>
             </div>
 
-            <!-- PROFITABILITY -->
             <div class="form-section">
-                <div class="section-label">03. Profitability & Margins</div>
+                <div class="section-label">Core Profitability</div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>ROE %</label><input type="number" id="roe" step="0.01"
-                            placeholder="0.00"></div>
-                    <div class="input-group"><label>ROA %</label><input type="number" id="roa" step="0.01"
-                            placeholder="0.00"></div>
+                    <div class="input-group" data-field="roe">
+                        <label>ROE %</label>
+                        <input type="number" id="roe" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="roa">
+                        <label>ROA %</label>
+                        <input type="number" id="roa" step="0.01" placeholder="0.00" />
+                    </div>
                 </div>
-                <div class="input-group"><label>EPS (PKR)</label><input type="number" id="eps" step="0.01"
-                        placeholder="0.00"></div>
-                <div class="spacer"></div>
-                <div class="input-group"><label>Gross Margin %</label><input type="number" id="grossMargin" step="0.01"
-                        placeholder="0.00"></div>
+
+                <div class="input-group" data-field="eps">
+                    <label>EPS (PKR)</label>
+                    <input type="number" id="eps" step="0.01" placeholder="0.00" />
+                </div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>Op. Margin %</label><input type="number" id="operatingMargin"
-                            step="0.01" placeholder="0.00"></div>
-                    <div class="input-group"><label>Net Margin %</label><input type="number" id="netMargin" step="0.01"
-                            placeholder="0.00"></div>
+                    <div class="input-group" data-field="netMargin">
+                        <label>Net Margin %</label>
+                        <input type="number" id="netMargin" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="opMargin">
+                        <label>Operating Margin %</label>
+                        <input type="number" id="opMargin" step="0.01" placeholder="0.00" />
+                    </div>
                 </div>
             </div>
 
-            <!-- HEALTH -->
             <div class="form-section">
-                <div class="section-label">04. Financial Health</div>
+                <div class="section-label">Core Financial Health</div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>Debt/Equity</label><input type="number" id="debtToEquity"
-                            step="0.01" placeholder="0.00"></div>
-                    <div class="input-group"><label>Current Ratio</label><input type="number" id="currentRatio"
-                            step="0.01" placeholder="0.00"></div>
+                    <div class="input-group" data-field="debtEquity">
+                        <label>Debt / Equity</label>
+                        <input type="number" id="debtEquity" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="currentRatio">
+                        <label>Current Ratio</label>
+                        <input type="number" id="currentRatio" step="0.01" placeholder="0.00" />
+                    </div>
+                </div>
+
+                <div class="input-group" data-field="interestCoverage">
+                    <label>Interest Coverage (x)</label>
+                    <input type="number" id="interestCoverage" step="0.01" placeholder="0.00" />
                 </div>
             </div>
 
-            <!-- GROWTH -->
             <div class="form-section">
-                <div class="section-label">05. Growth Metrics</div>
+                <div class="section-label">Core Growth</div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>EPS 1Y %</label><input type="number" id="epsGrowth1Y" step="0.01"
-                            placeholder="0.00"></div>
-                    <div class="input-group"><label>EPS 5Y %</label><input type="number" id="epsGrowth5Y" step="0.01"
-                            placeholder="0.00"></div>
+                    <div class="input-group" data-field="revGrowth1y">
+                        <label>Revenue Growth (1Y) %</label>
+                        <input type="number" id="revGrowth1y" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="epsGrowth1y">
+                        <label>EPS Growth (1Y) %</label>
+                        <input type="number" id="epsGrowth1y" step="0.01" placeholder="0.00" />
+                    </div>
                 </div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>Rev 1Y %</label><input type="number" id="revenueGrowth1Y"
-                            step="0.01" placeholder="0.00"></div>
-                    <div class="input-group"><label>Rev 5Y %</label><input type="number" id="revenueGrowth5Y"
-                            step="0.01" placeholder="0.00"></div>
+                    <div class="input-group" data-field="revGrowth5y">
+                        <label>Revenue Growth (5Y CAGR) %</label>
+                        <input type="number" id="revGrowth5y" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="epsGrowth5y">
+                        <label>EPS Growth (5Y CAGR) %</label>
+                        <input type="number" id="epsGrowth5y" step="0.01" placeholder="0.00" />
+                    </div>
                 </div>
             </div>
 
-            <!-- DIVIDENDS -->
             <div class="form-section">
-                <div class="section-label">06. Dividends</div>
+                <div class="section-label">Core Dividends</div>
+
                 <div class="input-row">
-                    <div class="input-group"><label>Yield %</label><input type="number" id="dividendYield" step="0.01"
-                            placeholder="0.00"></div>
-                    <div class="input-group"><label>Payout %</label><input type="number" id="payoutRatio" step="0.01"
-                            placeholder="0.00"></div>
+                    <div class="input-group" data-field="divYield">
+                        <label>Dividend Yield %</label>
+                        <input type="number" id="divYield" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div class="input-group" data-field="payoutRatio">
+                        <label>Payout Ratio %</label>
+                        <input type="number" id="payoutRatio" step="0.01" placeholder="0.00" />
+                    </div>
+                </div>
+
+                <div class="input-group" data-field="fcfPerShare">
+                    <label>Free Cash Flow / Share (PKR)</label>
+                    <input type="number" id="fcfPerShare" step="0.01" placeholder="0.00" />
                 </div>
             </div>
 
-            <button class="btn-evaluate" onclick="runAnalysis()">GENERATE PREMIUM REPORT</button>
+            <!-- Advanced Metrics (Sector-Switched) -->
+            <div class="form-section" id="advancedSection">
+                <div class="section-label">Advanced Sector Metrics</div>
+
+                <!-- BANKING -->
+                <div class="input-row">
+                    <div class="input-group" data-field="car">
+                        <label>CAR % (Capital Adequacy)</label>
+                        <input type="number" id="car" step="0.01" placeholder="e.g. 16.5" />
+                    </div>
+                    <div class="input-group" data-field="npl">
+                        <label>NPL % (Non-Performing Loans)</label>
+                        <input type="number" id="npl" step="0.01" placeholder="e.g. 7.2" />
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group" data-field="nim">
+                        <label>NIM % (Net Interest Margin)</label>
+                        <input type="number" id="nim" step="0.01" placeholder="e.g. 4.1" />
+                    </div>
+                    <div class="input-group" data-field="costIncome">
+                        <label>Cost-to-Income %</label>
+                        <input type="number" id="costIncome" step="0.01" placeholder="e.g. 48" />
+                    </div>
+                </div>
+
+                <!-- POWER -->
+                <div class="input-row">
+                    <div class="input-group" data-field="receivableDays">
+                        <label>Receivable Days</label>
+                        <input type="number" id="receivableDays" step="1" placeholder="e.g. 180" />
+                    </div>
+                    <div class="input-group" data-field="ocfCoverage">
+                        <label>OCF Coverage (OCF ÷ Dividends)</label>
+                        <input type="number" id="ocfCoverage" step="0.01" placeholder="e.g. 1.2" />
+                    </div>
+                </div>
+                <div class="input-group" data-field="payoutSustain">
+                    <label>Payout Sustainability (0–100)</label>
+                    <input type="number" id="payoutSustain" step="1" placeholder="e.g. 70" />
+                </div>
+
+                <!-- CEMENT / INDUSTRIAL -->
+                <div class="input-row">
+                    <div class="input-group" data-field="capacityUtil">
+                        <label>Capacity Utilization %</label>
+                        <input type="number" id="capacityUtil" step="0.01" placeholder="e.g. 72" />
+                    </div>
+                    <div class="input-group" data-field="fuelSensitivity">
+                        <label>Fuel Cost Sensitivity (0–100)</label>
+                        <input type="number" id="fuelSensitivity" step="1" placeholder="e.g. 60" />
+                    </div>
+                </div>
+
+                <!-- TECH / TELECOM -->
+                <div class="input-row">
+                    <div class="input-group" data-field="arpuGrowth">
+                        <label>ARPU Growth %</label>
+                        <input type="number" id="arpuGrowth" step="0.01" placeholder="e.g. 9.5" />
+                    </div>
+                    <div class="input-group" data-field="churn">
+                        <label>Churn % (Lower is better)</label>
+                        <input type="number" id="churn" step="0.01" placeholder="e.g. 3.2" />
+                    </div>
+                </div>
+                <div class="input-group" data-field="capexSales">
+                    <label>Capex / Sales %</label>
+                    <input type="number" id="capexSales" step="0.01" placeholder="e.g. 14" />
+                </div>
+
+                <!-- GENERIC (EXPORT / FX / WORKING CAPITAL) -->
+                <div class="input-row">
+                    <div class="input-group" data-field="exportExposure">
+                        <label>Export Exposure %</label>
+                        <input type="number" id="exportExposure" step="0.01" placeholder="e.g. 55" />
+                    </div>
+                    <div class="input-group" data-field="fxExposure">
+                        <label>FX Exposure % (Net)</label>
+                        <input type="number" id="fxExposure" step="0.01" placeholder="e.g. 25" />
+                    </div>
+                </div>
+                <div class="input-group" data-field="workingCapitalDays">
+                    <label>Working Capital Days</label>
+                    <input type="number" id="workingCapitalDays" step="1" placeholder="e.g. 90" />
+                </div>
+
+                <!-- AUTO -->
+                <div class="input-row">
+                    <div class="input-group" data-field="localizationRate">
+                        <label>Localization Rate %</label>
+                        <input type="number" id="localizationRate" step="0.01" placeholder="e.g. 62" />
+                    </div>
+                    <div class="input-group" data-field="inventoryDays">
+                        <label>Inventory Days</label>
+                        <input type="number" id="inventoryDays" step="1" placeholder="e.g. 45" />
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-evaluate" onclick="analyzeStock()">ANALYZE STOCK</button>
         </aside>
 
-        <!-- DASHBOARD -->
+        <!-- ================= DASHBOARD ================= -->
         <main class="dashboard">
-            <div class="content-wrapper">
+            <div id="emptyState" class="empty-state">
+                <div style="font-size:3rem; opacity:.2; color:var(--gold-primary);">⟡</div>
+                <h3>Ready for Analysis</h3>
+                <p>Enter financial data. Turn on <b>Advanced Mode</b> for sector-specific professional metrics and
+                    smoother scoring.</p>
+            </div>
 
-                <div id="emptyState" class="empty-state">
-                    <div class="empty-icon">⟡</div>
-                    <h3>Ready for Analysis</h3>
-                    <p>Enter comprehensive market data to generate a detailed valuation report.</p>
+            <div id="reportContent" class="hidden">
+                <div class="company-header">
+                    <div class="company-title">
+                        <h1 id="r_ticker">--</h1>
+                        <div class="company-meta">
+                            <span id="r_price">PKR --</span>
+                            <span style="margin:0 10px;">•</span>
+                            <span id="r_sector">--</span>
+                        </div>
+                    </div>
+
+                    <div class="score-display">
+                        <div class="score-label" id="r_scoreLabel">Core Fundamentals Score</div>
+                        <div class="score-big" id="r_score">0</div>
+                        <div class="badge-row">
+                            <span class="pill" id="r_riskPill"><span class="dot" id="r_riskDot"></span><span
+                                    id="r_riskText">MODERATE</span></span>
+                            <span class="pill" id="r_confPill"><span class="dot" id="r_confDot"></span><span
+                                    id="r_confText">CONF: MED</span></span>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="reportContent" class="hidden">
+                <div id="warningBox" class="alert-box hidden">
+                    <div class="alert-title">⚠️ Risk Warnings</div>
+                    <ul class="alert-list" id="warningList"></ul>
+                </div>
 
-                    <header class="company-header fade-in">
-                        <div class="company-title">
-                            <h1 id="r_name">--</h1>
-                            <div class="company-meta" id="r_price">PKR --</div>
+                <div class="verdict-banner">
+                    <div class="verdict-badge" id="r_verdict">--</div>
+                    <div class="verdict-text" id="r_summary">--</div>
+
+                    <div class="explanation-box">
+                        <div class="explanation-title">Analysis Breakdown</div>
+                        <div class="explanation-text" id="r_explanation">--</div>
+                    </div>
+                </div>
+
+                <div class="bento-grid">
+                    <div class="bento-card">
+                        <div class="card-title">Valuation</div>
+                        <div class="metric-line"><span class="m-key">P/E Ratio</span><span class="m-val"
+                                id="r_pe">--</span></div>
+                        <div class="metric-line"><span class="m-key">P/B Ratio</span><span class="m-val"
+                                id="r_pb">--</span></div>
+                        <div class="metric-line"><span class="m-key">Book Value/Share</span><span class="m-val"
+                                id="r_bookVal">--</span></div>
+                    </div>
+
+                    <div class="bento-card">
+                        <div class="card-title">Profitability</div>
+                        <div class="metric-line"><span class="m-key">ROE</span><span class="m-val" id="r_roe">--</span>
                         </div>
-                        <div class="score-block">
-                            <div class="score-big" id="r_score">0</div>
-                            <div class="score-label">Intrinsix Score™</div>
+                        <div class="metric-line"><span class="m-key">ROA</span><span class="m-val" id="r_roa">--</span>
                         </div>
-                    </header>
-
-                    <section class="bento-grid">
-
-                        <!-- VERDICT -->
-                        <div class="bento-card full fade-in" style="animation-delay: 0.1s">
-                            <div class="card-title">Investment Verdict</div>
-                            <div class="rec-banner">
-                                <span class="rec-badge" id="r_verdict">--</span>
-                                <span class="rec-text" id="r_summary">--</span>
-                            </div>
+                        <div class="metric-line"><span class="m-key">Net Margin</span><span class="m-val"
+                                id="r_netMargin">--</span></div>
+                        <div class="metric-line"><span class="m-key">EPS</span><span class="m-val" id="r_eps">--</span>
                         </div>
+                    </div>
 
-                        <!-- VALUATION -->
-                        <div class="bento-card fade-in" style="animation-delay: 0.2s">
-                            <div class="card-title">Valuation</div>
-                            <div class="metric-line">
-                                <span class="m-keys">P/E Ratio</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_pe">--</span><span class="status-dot" id="dot_pe"></span></div>
-                            </div>
-                            <div class="metric-line">
-                                <span class="m-keys">P/B Ratio</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_pb">--</span><span class="status-dot" id="dot_pb"></span></div>
-                            </div>
-                        </div>
+                    <div class="bento-card">
+                        <div class="card-title">Financial Health</div>
+                        <div class="metric-line"><span class="m-key">Debt/Equity</span><span class="m-val"
+                                id="r_debt">--</span></div>
+                        <div class="metric-line"><span class="m-key">Current Ratio</span><span class="m-val"
+                                id="r_current">--</span></div>
+                        <div class="metric-line"><span class="m-key">Interest Coverage</span><span class="m-val"
+                                id="r_interest">--</span></div>
+                    </div>
 
-                        <!-- PROFITABILITY -->
-                        <div class="bento-card fade-in" style="animation-delay: 0.3s">
-                            <div class="card-title">Profit Efficiency</div>
-                            <div class="metric-line">
-                                <span class="m-keys">ROE</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_roe">--</span><span class="status-dot" id="dot_roe"></span></div>
+                    <div class="bento-card wide">
+                        <div class="card-title">Growth Trajectory</div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+                            <div>
+                                <div
+                                    style="color:var(--text-muted); font-size:.75rem; margin-bottom:10px; font-weight:900; letter-spacing:.12em;">
+                                    REVENUE</div>
+                                <div class="metric-line"><span class="m-key">1 Year</span><span class="m-val"
+                                        id="r_revG1">--</span></div>
+                                <div class="metric-line"><span class="m-key">5Y CAGR</span><span class="m-val"
+                                        id="r_revG5">--</span></div>
                             </div>
-                            <div class="metric-line">
-                                <span class="m-keys">ROA</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_roa">--</span><span class="status-dot" id="dot_roa"></span></div>
-                            </div>
-                            <div class="metric-line">
-                                <span class="m-keys">EPS</span>
-                                <span class="m-vals" id="r_eps">--</span>
-                            </div>
-                        </div>
-
-                        <!-- MARGINS -->
-                        <div class="bento-card fade-in" style="animation-delay: 0.35s">
-                            <div class="card-title">Margins</div>
-                            <div class="metric-line">
-                                <span class="m-keys">Gross</span>
-                                <span class="m-vals" id="r_gross">--</span>
-                            </div>
-                            <div class="metric-line">
-                                <span class="m-keys">Operating</span>
-                                <span class="m-vals" id="r_op">--</span>
-                            </div>
-                            <div class="metric-line">
-                                <span class="m-keys">Net</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_net">--</span><span class="status-dot" id="dot_net"></span></div>
+                            <div>
+                                <div
+                                    style="color:var(--text-muted); font-size:.75rem; margin-bottom:10px; font-weight:900; letter-spacing:.12em;">
+                                    EARNINGS</div>
+                                <div class="metric-line"><span class="m-key">1 Year</span><span class="m-val"
+                                        id="r_epsG1">--</span></div>
+                                <div class="metric-line"><span class="m-key">5Y CAGR</span><span class="m-val"
+                                        id="r_epsG5">--</span></div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- HEALTH -->
-                        <div class="bento-card fade-in" style="animation-delay: 0.4s">
-                            <div class="card-title">Balance Sheet</div>
-                            <div class="metric-line">
-                                <span class="m-keys">Debt/Equity</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_debt">--</span><span class="status-dot" id="dot_debt"></span></div>
-                            </div>
-                            <div class="metric-line">
-                                <span class="m-keys">Current Ratio</span>
-                                <div style="display:flex; align-items:center"><span class="m-vals"
-                                        id="r_cr">--</span><span class="status-dot" id="dot_cr"></span></div>
-                            </div>
+                    <div class="bento-card">
+                        <div class="card-title">Income & Cash</div>
+                        <div class="metric-line"><span class="m-key">Dividend Yield</span><span class="m-val"
+                                id="r_yield" style="color:var(--gold-light); font-size:1.35rem;">--%</span></div>
+                        <div class="metric-line"><span class="m-key">Payout Ratio</span><span class="m-val"
+                                id="r_payout">--</span></div>
+                        <div class="metric-line"><span class="m-key">FCF / Share</span><span class="m-val"
+                                id="r_fcf">--</span></div>
+                    </div>
+
+                    <div class="bento-card full" id="r_advCard">
+                        <div class="card-title">Advanced Sector Metrics (Visible in Advanced Mode)</div>
+                        <div id="r_advLines" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
                         </div>
+                    </div>
+                </div>
 
-                        <!-- GROWTH -->
-                        <div class="bento-card wide fade-in" style="animation-delay: 0.5s">
-                            <div class="card-title">Growth Trajectory</div>
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                <div>
-                                    <div class="section-label"
-                                        style="margin-bottom:10px; border:none; color:var(--text-muted)">Earnings (EPS)
-                                    </div>
-                                    <div class="metric-line">
-                                        <span class="m-keys">1 Year</span>
-                                        <span class="m-vals" id="r_g_eps1">--</span>
-                                    </div>
-                                    <div class="metric-line">
-                                        <span class="m-keys">5 Year (CAGR)</span>
-                                        <div style="display:flex; align-items:center"><span class="m-vals"
-                                                id="r_g_eps5">--</span><span class="status-dot" id="dot_g_eps"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="section-label"
-                                        style="margin-bottom:10px; border:none; color:var(--text-muted)">Revenue</div>
-                                    <div class="metric-line">
-                                        <span class="m-keys">1 Year</span>
-                                        <span class="m-vals" id="r_g_rev1">--</span>
-                                    </div>
-                                    <div class="metric-line">
-                                        <span class="m-keys">5 Year (CAGR)</span>
-                                        <div style="display:flex; align-items:center"><span class="m-vals"
-                                                id="r_g_rev5">--</span><span class="status-dot" id="dot_g_rev"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- DIVIDENDS -->
-                        <div class="bento-card fade-in" style="animation-delay: 0.6s">
-                            <div class="card-title">Income</div>
-                            <div style="display:flex; flex-direction:column; gap:10px">
-                                <div>
-                                    <div class="m-keys">Annual Yield</div>
-                                    <div class="m-vals"
-                                        style="font-size:1.8rem; margin-top:5px; color: var(--gold-light)" id="r_yield">
-                                        --%</div>
-                                </div>
-                                <div class="metric-line">
-                                    <span class="m-keys">Payout Ratio</span>
-                                    <span class="m-vals" id="r_payout">--</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </section>
+                <div class="explanation-box">
+                    <div class="explanation-title">📌 How to use this</div>
+                    <div class="explanation-text">
+                        This tool applies <b>smooth scoring</b> (no sudden jumps) and <b>sector-specific switching</b>
+                        in Advanced Mode.
+                        Always validate numbers from official financial statements and consider qualitative risks
+                        (management, regulation, competition, macro).
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        function runAnalysis() {
-            document.getElementById('emptyState').classList.add('hidden');
-            const report = document.getElementById('reportContent');
-            report.classList.remove('hidden');
+        /***************************************************************
+         * 0) N/A Checkbox Initialization & Handling
+         ***************************************************************/
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all input fields that need N/A checkboxes (exclude ticker, price, sector)
+            const fieldsToWrap = FIELD_IDS.filter(id => !['ticker', 'price', 'sector'].includes(id));
 
-            report.querySelectorAll('.fade-in').forEach(el => {
-                el.style.animation = 'none';
-                el.offsetHeight;
-                el.style.animation = null;
+            fieldsToWrap.forEach(fieldId => {
+                const input = document.getElementById(fieldId);
+                if (!input) return;
+
+                // Create wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-wrapper';
+                wrapper.dataset.fieldId = fieldId;
+
+                // Create N/A checkbox wrapper
+                const naWrapper = document.createElement('div');
+                naWrapper.className = 'na-checkbox-wrapper';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'na-checkbox';
+                checkbox.id = `na_${fieldId}`;
+                checkbox.dataset.fieldId = fieldId;
+
+                const label = document.createElement('label');
+                label.className = 'na-label';
+                label.htmlFor = `na_${fieldId}`;
+                label.textContent = 'N/A';
+                label.title = 'Mark as data not available';
+
+                naWrapper.appendChild(checkbox);
+                naWrapper.appendChild(label);
+
+                // Insert wrapper before input
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+                wrapper.appendChild(naWrapper);
+
+                // Handle checkbox change
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        wrapper.classList.add('na-active');
+                        input.value = '';
+                        input.dataset.naMarked = 'true';
+                    } else {
+                        wrapper.classList.remove('na-active');
+                        delete input.dataset.naMarked;
+                    }
+                });
+
+                // Handle input change - uncheck N/A if user enters data
+                input.addEventListener('input', function () {
+                    if (this.value && checkbox.checked) {
+                        checkbox.checked = false;
+                        wrapper.classList.remove('na-active');
+                        delete this.dataset.naMarked;
+                    }
+                });
             });
+        });
 
-            const val = (id) => parseFloat(document.getElementById(id).value) || 0;
-            const txt = (id) => document.getElementById(id).value;
+        /***************************************************************
+         * 1) Smooth scoring utilities (no step/bucket jumps)
+         ***************************************************************/
+        const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
-            const data = {
-                name: txt('companyName') || 'TICKER',
-                price: val('currentPrice'),
-                pe: val('peRatio'),
-                pb: val('pbRatio'),
-                roe: val('roe'),
-                roa: val('roa'),
-                eps: val('eps'),
-                gross: val('grossMargin'),
-                op: val('operatingMargin'),
-                net: val('netMargin'),
-                debt: val('debtToEquity'),
-                cr: val('currentRatio'),
-                epsG1: val('epsGrowth1Y'),
-                epsG5: val('epsGrowth5Y'),
-                revG1: val('revenueGrowth1Y'),
-                revG5: val('revenueGrowth5Y'),
-                yield: val('dividendYield'),
-                payout: val('payoutRatio')
-            };
+        // Higher is better -> returns [0..1]
+        function scoreHigherBetter(val, bad, good) {
+            if (!isFinite(val)) return null;
+            if (val <= bad) return 0;
+            if (val >= good) return 1;
+            return (val - bad) / (good - bad);
+        }
 
-            let score = 0;
+        // Lower is better -> returns [0..1]
+        function scoreLowerBetter(val, good, bad) {
+            if (!isFinite(val)) return null;
+            if (val <= good) return 1;
+            if (val >= bad) return 0;
+            return 1 - (val - good) / (bad - good);
+        }
 
-            // Valuation (Max 20)
-            if (data.pe > 0 && data.pe < 12) score += 12;
-            else if (data.pe <= 20) score += 8;
-            if (data.pb < 1.2) score += 8;
-            else if (data.pb < 2.5) score += 4;
+        // In-range is best (e.g. payout too low/too high both bad)
+        function scoreTargetRange(val, lowBad, lowGood, highGood, highBad) {
+            if (!isFinite(val)) return null;
+            if (val <= lowBad) return 0;
+            if (val >= highBad) return 0;
+            if (val >= lowGood && val <= highGood) return 1;
+            if (val < lowGood) return (val - lowBad) / (lowGood - lowBad);
+            return 1 - (val - highGood) / (highBad - highGood);
+        }
 
-            // Profitability (Max 25)
-            if (data.roe > 15) score += 10;
-            else if (data.roe > 10) score += 5;
-            if (data.roa > 8) score += 5;
-            if (data.net > 10) score += 10;
+        /***************************************************************
+         * 2) Field visibility + sector switching (Phase 2)
+         ***************************************************************/
+        const $ = (id) => document.getElementById(id);
+        const qAll = (sel) => Array.from(document.querySelectorAll(sel));
 
-            // Health (Max 15)
-            if (data.debt < 0.5) score += 10;
-            else if (data.debt < 1.0) score += 5;
-            if (data.cr > 1.2) score += 5;
+        const FIELD_IDS = [
+            // Identity
+            "ticker", "price", "sector",
 
-            // Growth (Max 25)
-            if (data.epsG5 > 15) score += 15;
-            else if (data.epsG5 > 8) score += 8;
-            if (data.revG5 > 10) score += 10;
+            // Core valuation
+            "pe", "pb", "bookValue",
 
-            // Dividends (Max 15)
-            if (data.yield > 6) score += 15;
-            else if (data.yield > 3) score += 8;
+            // Core profitability
+            "roe", "roa", "eps", "netMargin", "opMargin",
 
-            score = Math.min(100, score);
+            // Core health
+            "debtEquity", "currentRatio", "interestCoverage",
 
-            document.getElementById('r_name').innerText = data.name.toUpperCase();
-            document.getElementById('r_price').innerText = `PKR ${data.price.toFixed(2)}`;
-            document.getElementById('r_score').innerText = score;
+            // Growth
+            "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y",
 
-            let verdict = "HOLD";
-            let summary = "Balanced profile with mixed indicators.";
-            let vColor = "#F4DF89";
+            // Dividends & cash
+            "divYield", "payoutRatio", "fcfPerShare",
 
-            if (score >= 80) {
-                verdict = "STRONG BUY";
-                summary = "Exceptional fundamentals across all key metrics.";
-                vColor = "#34d399";
-            } else if (score >= 65) {
-                verdict = "BUY";
-                summary = "Solid performance with minor areas for improvement.";
-                vColor = "#34d399";
-            } else if (score <= 35) {
-                verdict = "SELL";
-                summary = "Significant risks detected in financial health.";
-                vColor = "#f87171";
+            // Advanced (banking)
+            "car", "npl", "nim", "costIncome",
+
+            // Advanced (power)
+            "receivableDays", "ocfCoverage", "payoutSustain",
+
+            // Advanced (cement/industrial)
+            "capacityUtil", "fuelSensitivity",
+
+            // Advanced (tech/telecom)
+            "arpuGrowth", "churn", "capexSales",
+
+            // Advanced generic
+            "exportExposure", "fxExposure", "workingCapitalDays",
+
+            // Auto
+            "localizationRate", "inventoryDays"
+        ];
+
+        // Sector -> which fields are relevant (Core always visible in Basic Mode + Advanced Mode)
+        const SECTOR_SCHEMA = {
+            banking: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "roa", "eps", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio"],
+                advanced: ["car", "npl", "nim", "costIncome"],
+            },
+            power: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "debtEquity", "interestCoverage", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio"],
+                advanced: ["receivableDays", "ocfCoverage", "payoutSustain", "workingCapitalDays", "fxExposure"],
+            },
+            cement: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["capacityUtil", "fuelSensitivity", "workingCapitalDays"],
+            },
+            oil: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["fxExposure", "workingCapitalDays", "capexSales"],
+            },
+            fertilizer: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["fxExposure", "exportExposure", "workingCapitalDays"],
+            },
+            textile: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["exportExposure", "fxExposure", "workingCapitalDays"],
+            },
+            pharma: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["exportExposure", "fxExposure", "capexSales", "workingCapitalDays"],
+            },
+            fmcg: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["workingCapitalDays", "exportExposure"],
+            },
+            tech: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["arpuGrowth", "churn", "capexSales", "fxExposure"],
+            },
+            auto: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["localizationRate", "inventoryDays", "fxExposure", "workingCapitalDays"],
+            },
+            other: {
+                core: ["ticker", "price", "sector", "pe", "pb", "bookValue", "roe", "eps", "netMargin", "opMargin", "debtEquity", "interestCoverage", "currentRatio", "revGrowth1y", "epsGrowth1y", "revGrowth5y", "epsGrowth5y", "divYield", "payoutRatio", "fcfPerShare"],
+                advanced: ["exportExposure", "fxExposure", "workingCapitalDays", "capexSales"],
+            }
+        };
+
+        function currentSector() {
+            const s = ($("sector").value || "other").trim();
+            return SECTOR_SCHEMA[s] ? s : "other";
+        }
+
+        function setFieldVisible(fieldId, visible) {
+            const el = document.querySelector(`[data-field="${fieldId}"]`);
+            if (!el) return;
+            el.classList.toggle("hidden", !visible);
+        }
+
+        function updateFieldVisibility() {
+            const sector = currentSector();
+            const advancedOn = $("advancedMode").checked;
+
+            const schema = SECTOR_SCHEMA[sector] || SECTOR_SCHEMA.other;
+            const allow = new Set(schema.core.concat(advancedOn ? schema.advanced : []));
+
+            // Show/hide all fields
+            for (const id of FIELD_IDS) setFieldVisible(id, allow.has(id));
+
+            // Show/hide advanced section container
+            $("advancedSection").classList.toggle("hidden", !advancedOn);
+
+            // Update report card visibility for advanced outputs
+            $("r_advCard").classList.toggle("hidden", !advancedOn);
+
+            // Update score label in report
+            $("r_scoreLabel").textContent = advancedOn ? "Professional Composite Score" : "Core Fundamentals Score";
+        }
+
+        $("sector").addEventListener("change", updateFieldVisibility);
+        $("advancedMode").addEventListener("change", updateFieldVisibility);
+
+        // initial
+        updateFieldVisibility();
+
+        /***************************************************************
+         * 3) Sector benchmarks + weights (Core + Advanced)
+         *    - Uses smooth scoring ranges (bad..good) / (good..bad)
+         ***************************************************************/
+        // Metric config per sector: direction + ranges + weights
+        // Direction: "HB" higher better, "LB" lower better, "TR" target range
+        // Range meaning:
+        //  - HB: {bad, good}
+        //  - LB: {good, bad}
+        //  - TR: {lowBad, lowGood, highGood, highBad}
+        const BENCH = {
+            default: {
+                // Core weights roughly sum ~100 points (we normalize anyway)
+                pe: { dir: "LB", good: 10, bad: 28, w: 10 },
+                pb: { dir: "LB", good: 1.5, bad: 4.5, w: 8 },
+                roe: { dir: "HB", bad: 6, good: 18, w: 12 },
+                roa: { dir: "HB", bad: 2, good: 6, w: 6 },
+                netMargin: { dir: "HB", bad: 3, good: 14, w: 10 },
+                opMargin: { dir: "HB", bad: 4, good: 16, w: 8 },
+                debtEquity: { dir: "LB", good: 0.6, bad: 2.2, w: 10 },
+                currentRatio: { dir: "HB", bad: 0.9, good: 1.6, w: 6 },
+                interestCoverage: { dir: "HB", bad: 1.8, good: 6.0, w: 10 },
+                revGrowth5y: { dir: "HB", bad: 1, good: 10, w: 7 },
+                epsGrowth5y: { dir: "HB", bad: 2, good: 12, w: 7 },
+                divYield: { dir: "HB", bad: 1.5, good: 6.0, w: 6 },
+                payoutRatio: { dir: "TR", lowBad: 0, lowGood: 20, highGood: 70, highBad: 110, w: 6 },
+                fcfPerShare: { dir: "HB", bad: 0, good: 10, w: 4 }, // treated as extra; if missing doesn't kill score
+
+                // Advanced (generic)
+                exportExposure: { dir: "HB", bad: 5, good: 45, w: 4 },
+                fxExposure: { dir: "LB", good: 10, bad: 40, w: 4 },
+                workingCapitalDays: { dir: "LB", good: 45, bad: 140, w: 6 },
+                capexSales: { dir: "TR", lowBad: 0, lowGood: 3, highGood: 15, highBad: 30, w: 4 }
+            },
+
+            banking: {
+                pe: { dir: "LB", good: 6, bad: 14, w: 8 },
+                pb: { dir: "LB", good: 0.9, bad: 2.2, w: 12 },
+                roe: { dir: "HB", bad: 8, good: 18, w: 14 },
+                roa: { dir: "HB", bad: 0.6, good: 1.8, w: 10 },
+                // Growth stays
+                revGrowth5y: { dir: "HB", bad: 2, good: 10, w: 7 },
+                epsGrowth5y: { dir: "HB", bad: 3, good: 12, w: 7 },
+                divYield: { dir: "HB", bad: 2.0, good: 8.0, w: 8 },
+                payoutRatio: { dir: "TR", lowBad: 0, lowGood: 15, highGood: 55, highBad: 90, w: 7 },
+
+                // Advanced banking
+                car: { dir: "HB", bad: 11, good: 16, w: 10 },
+                npl: { dir: "LB", good: 5, bad: 12, w: 12 },
+                nim: { dir: "HB", bad: 2.5, good: 4.5, w: 9 },
+                costIncome: { dir: "LB", good: 45, bad: 70, w: 8 }
+            },
+
+            power: {
+                // Power tends to be yield-driven; keep valuation lighter, risk heavier
+                pe: { dir: "LB", good: 7, bad: 16, w: 7 },
+                pb: { dir: "LB", good: 1.0, bad: 3.0, w: 6 },
+                roe: { dir: "HB", bad: 8, good: 18, w: 10 },
+                netMargin: { dir: "HB", bad: 5, good: 18, w: 8 },
+                debtEquity: { dir: "LB", good: 0.8, bad: 2.5, w: 10 },
+                interestCoverage: { dir: "HB", bad: 1.7, good: 4.5, w: 10 },
+                divYield: { dir: "HB", bad: 3.0, good: 10.0, w: 10 },
+                payoutRatio: { dir: "TR", lowBad: 0, lowGood: 20, highGood: 75, highBad: 120, w: 8 },
+                revGrowth5y: { dir: "HB", bad: 0, good: 8, w: 4 },
+                epsGrowth5y: { dir: "HB", bad: 0, good: 8, w: 4 },
+
+                // Advanced
+                receivableDays: { dir: "LB", good: 90, bad: 300, w: 14 },
+                ocfCoverage: { dir: "HB", bad: 0.6, good: 1.3, w: 10 },
+                payoutSustain: { dir: "HB", bad: 40, good: 80, w: 8 },
+                fxExposure: { dir: "LB", good: 10, bad: 35, w: 4 },
+                workingCapitalDays: { dir: "LB", good: 35, bad: 120, w: 4 }
+            },
+
+            cement: {
+                pe: { dir: "LB", good: 8, bad: 18, w: 10 },
+                pb: { dir: "LB", good: 1.2, bad: 3.2, w: 7 },
+                roe: { dir: "HB", bad: 8, good: 20, w: 12 },
+                netMargin: { dir: "HB", bad: 6, good: 18, w: 10 },
+                opMargin: { dir: "HB", bad: 7, good: 20, w: 8 },
+                debtEquity: { dir: "LB", good: 0.6, bad: 2.2, w: 10 },
+                interestCoverage: { dir: "HB", bad: 1.8, good: 6.0, w: 10 },
+                currentRatio: { dir: "HB", bad: 0.9, good: 1.6, w: 6 },
+                revGrowth5y: { dir: "HB", bad: 1, good: 10, w: 5 },
+                epsGrowth5y: { dir: "HB", bad: 2, good: 12, w: 5 },
+                divYield: { dir: "HB", bad: 1.0, good: 5.0, w: 4 },
+                payoutRatio: { dir: "TR", lowBad: 0, lowGood: 15, highGood: 55, highBad: 100, w: 4 },
+                fcfPerShare: { dir: "HB", bad: 0, good: 10, w: 4 },
+
+                // Advanced
+                capacityUtil: { dir: "HB", bad: 45, good: 75, w: 10 },
+                fuelSensitivity: { dir: "LB", good: 35, bad: 80, w: 8 }, // lower sensitivity better
+                workingCapitalDays: { dir: "LB", good: 55, bad: 160, w: 6 }
+            },
+
+            tech: {
+                pe: { dir: "LB", good: 12, bad: 35, w: 8 },
+                pb: { dir: "LB", good: 2.0, bad: 7.0, w: 6 },
+                roe: { dir: "HB", bad: 6, good: 18, w: 10 },
+                netMargin: { dir: "HB", bad: 4, good: 16, w: 10 },
+                opMargin: { dir: "HB", bad: 5, good: 18, w: 8 },
+                debtEquity: { dir: "LB", good: 0.6, bad: 1.8, w: 6 },
+                interestCoverage: { dir: "HB", bad: 2.0, good: 7.0, w: 6 },
+                revGrowth5y: { dir: "HB", bad: 4, good: 14, w: 10 },
+                epsGrowth5y: { dir: "HB", bad: 5, good: 18, w: 10 },
+                divYield: { dir: "HB", bad: 0, good: 3.5, w: 2 },
+                payoutRatio: { dir: "TR", lowBad: 0, lowGood: 0, highGood: 40, highBad: 90, w: 2 },
+                fcfPerShare: { dir: "HB", bad: 0, good: 10, w: 4 },
+
+                // Advanced tech/telecom
+                arpuGrowth: { dir: "HB", bad: 1, good: 10, w: 8 },
+                churn: { dir: "LB", good: 2.5, bad: 7.0, w: 8 },
+                capexSales: { dir: "TR", lowBad: 0, lowGood: 3, highGood: 18, highBad: 35, w: 6 },
+                fxExposure: { dir: "LB", good: 10, bad: 35, w: 4 }
+            }
+        };
+
+        function sectorBench(sector) {
+            if (BENCH[sector]) return BENCH[sector];
+            // map some sectors to default if not specified explicitly
+            return BENCH.default;
+        }
+
+        /***************************************************************
+         * 4) Data helpers
+         ***************************************************************/
+        function num(id) {
+            const el = $(id);
+            if (!el) return NaN;
+            // Check if field is marked as N/A
+            if (el.dataset.naMarked === 'true') return NaN;
+            const v = parseFloat(el.value);
+            return isFinite(v) ? v : NaN;
+        }
+        function text(id) {
+            const el = $(id);
+            return (el && el.value ? el.value : "");
+        }
+
+        function isFieldVisible(fieldId) {
+            const wrap = document.querySelector(`[data-field="${fieldId}"]`);
+            return wrap && !wrap.classList.contains("hidden");
+        }
+
+        function computeMetricScore(metricId, cfg, value) {
+            if (!isFinite(value)) return null;
+
+            if (cfg.dir === "HB") return scoreHigherBetter(value, cfg.bad, cfg.good);
+            if (cfg.dir === "LB") return scoreLowerBetter(value, cfg.good, cfg.bad);
+            if (cfg.dir === "TR") return scoreTargetRange(value, cfg.lowBad, cfg.lowGood, cfg.highGood, cfg.highBad);
+            return null;
+        }
+
+        /***************************************************************
+         * 5) Scoring Engine (Core + Advanced)
+         ***************************************************************/
+        function analyzeStock() {
+            const sector = currentSector();
+            const advOn = $("advancedMode").checked;
+            const schema = SECTOR_SCHEMA[sector] || SECTOR_SCHEMA.other;
+            const bench = sectorBench(sector);
+
+            // collect warnings + scoring buckets
+            const warnings = [];
+
+            // split expected metrics into core vs advanced for scoring
+            const coreFields = schema.core.filter(f => !["ticker", "price", "sector"].includes(f));
+            const advFields = advOn ? schema.advanced : [];
+
+            // CORE SCORE (0..100) from smooth weights
+            const coreResult = weightedScore(coreFields, bench, warnings);
+
+            // ADVANCED ADJUSTMENT (±15 max) — centered around 0
+            let advAdj = 0;
+            let advResult = { score: null, coverage: 0, presentWeight: 0, totalWeight: 0 };
+            if (advOn) {
+                advResult = weightedCenteredAdjustment(advFields, bench, warnings, 15);
+                advAdj = advResult.adjustment;
             }
 
-            const verdictEl = document.getElementById('r_verdict');
-            verdictEl.innerText = verdict;
-            verdictEl.style.backgroundColor = vColor;
-            verdictEl.style.color = (score >= 65 || score <= 35) ? '#000' : '#000';
-            document.getElementById('r_summary').innerText = summary;
+            // FINAL SCORE
+            const baseScore = coreResult.score;
+            const finalScore = advOn ? clamp(Math.round(baseScore + advAdj), 0, 100) : baseScore;
 
-            const updateMetric = (idText, val, idDot, condition) => {
-                document.getElementById(idText).innerText = val;
-                if (idDot) {
-                    const dot = document.getElementById(idDot);
-                    dot.style.backgroundColor = condition ? 'var(--success)' : 'var(--danger)';
-                    if (!condition && parseFloat(val) === 0) dot.style.backgroundColor = 'gray';
+            // CONFIDENCE (data completeness by expected weights)
+            const totalExpectedW = coreResult.totalWeight + (advOn ? advResult.totalWeight : 0);
+            const presentW = coreResult.presentWeight + (advOn ? advResult.presentWeight : 0);
+            const confidence = totalExpectedW > 0 ? presentW / totalExpectedW : 0;
+
+            // RISK FACTORS (simple but strong)
+            const risk = computeRisk(sector, advOn, bench, warnings);
+
+            // VERDICT
+            const verdictObj = buildVerdict(finalScore, risk.riskFactors, advOn);
+
+            // UI update
+            renderReport({
+                sector,
+                advOn,
+                finalScore,
+                baseScore,
+                advAdj,
+                confidence,
+                risk,
+                verdictObj,
+                warnings
+            });
+        }
+
+        function weightedScore(metricIds, bench, warnings) {
+            let sum = 0;
+            let totalW = 0;
+            let presentW = 0;
+
+            for (const id of metricIds) {
+                if (!isFieldVisible(id)) continue; // sector switching already did this
+                const cfg = bench[id];
+                if (!cfg || !cfg.w) continue;
+
+                totalW += cfg.w;
+
+                const v = num(id);
+                const s = computeMetricScore(id, cfg, v);
+
+                if (s === null) {
+                    // missing -> no add, but reduces confidence (presentW not added)
+                    continue;
                 }
-            };
 
-            updateMetric('r_pe', data.pe.toFixed(2), 'dot_pe', data.pe < 20 && data.pe > 0);
-            updateMetric('r_pb', data.pb.toFixed(2), 'dot_pb', data.pb < 2);
-            updateMetric('r_roe', data.roe.toFixed(2) + '%', 'dot_roe', data.roe > 12);
-            updateMetric('r_roa', data.roa.toFixed(2) + '%', 'dot_roa', data.roa > 8);
-            document.getElementById('r_eps').innerText = data.eps.toFixed(2);
-            document.getElementById('r_gross').innerText = data.gross.toFixed(2) + '%';
-            document.getElementById('r_op').innerText = data.op.toFixed(2) + '%';
-            updateMetric('r_net', data.net.toFixed(2) + '%', 'dot_net', data.net > 10);
-            updateMetric('r_debt', data.debt.toFixed(2), 'dot_debt', data.debt < 1);
-            updateMetric('r_cr', data.cr.toFixed(2), 'dot_cr', data.cr > 1.2);
-            document.getElementById('r_g_eps1').innerText = data.epsG1.toFixed(2) + '%';
-            updateMetric('r_g_eps5', data.epsG5.toFixed(2) + '%', 'dot_g_eps', data.epsG5 > 10);
-            document.getElementById('r_g_rev1').innerText = data.revG1.toFixed(2) + '%';
-            updateMetric('r_g_rev5', data.revG5.toFixed(2) + '%', 'dot_g_rev', data.revG5 > 10);
-            document.getElementById('r_yield').innerText = data.yield.toFixed(2) + '%';
-            document.getElementById('r_payout').innerText = data.payout.toFixed(2) + '%';
+                presentW += cfg.w;
+                sum += s * cfg.w;
+            }
+
+            // If user left most fields empty, avoid NaN: score falls back to 0
+            const score = (presentW > 0) ? Math.round((sum / presentW) * 100) : 0;
+
+            // Smart warnings for incomplete data
+            if (presentW / Math.max(1, totalW) < 0.55) {
+                warnings.push("Low data completeness: score confidence is limited until more fields are filled.");
+            }
+
+            return { score, presentWeight: presentW, totalWeight: totalW };
+        }
+
+        // Advanced should refine (+/-), not dominate.
+        // We center each metric score around 0: centered = (score-0.5)*2 in [-1..1]
+        // adjustment = cap * weightedAvg(centered)
+        function weightedCenteredAdjustment(metricIds, bench, warnings, cap = 15) {
+            let sumCentered = 0;
+            let totalW = 0;
+            let presentW = 0;
+
+            for (const id of metricIds) {
+                if (!isFieldVisible(id)) continue;
+                const cfg = bench[id] || BENCH.default[id]; // allow fallback for generic advanced
+                if (!cfg || !cfg.w) continue;
+
+                totalW += cfg.w;
+
+                const v = num(id);
+                const s = computeMetricScore(id, cfg, v);
+                if (s === null) continue;
+
+                presentW += cfg.w;
+                const centered = (s - 0.5) * 2; // -1..1
+                sumCentered += centered * cfg.w;
+            }
+
+            const avgCentered = (presentW > 0) ? (sumCentered / presentW) : 0;
+            const adjustment = clamp(avgCentered * cap, -cap, cap);
+
+            return {
+                adjustment,
+                presentWeight: presentW,
+                totalWeight: totalW
+            };
+        }
+
+        function computeRisk(sector, advOn, bench, warnings) {
+            // risk factors count
+            let riskFactors = 0;
+
+            const v = (id) => num(id);
+
+            // Universal-ish red flags (only if field visible)
+            if (isFieldVisible("eps") && v("eps") <= 0 && isFinite(v("eps"))) { warnings.push("EPS is zero/negative: profitability risk."); riskFactors++; }
+
+            if (isFieldVisible("debtEquity") && isFinite(v("debtEquity")) && v("debtEquity") > 2.5) { warnings.push("Debt/Equity is very high: leverage risk."); riskFactors++; }
+            if (isFieldVisible("currentRatio") && isFinite(v("currentRatio")) && v("currentRatio") < 1.0) { warnings.push("Current ratio below 1.0: liquidity risk."); riskFactors++; }
+            if (isFieldVisible("interestCoverage") && isFinite(v("interestCoverage")) && v("interestCoverage") < 1.5) { warnings.push("Interest coverage below 1.5x: solvency pressure."); riskFactors++; }
+
+            if (isFieldVisible("payoutRatio") && isFinite(v("payoutRatio")) && v("payoutRatio") > 110) { warnings.push("Payout ratio above 110%: dividend may be unsustainable."); riskFactors++; }
+
+            // Sector-specific red flags (Advanced Mode)
+            if (advOn) {
+                if (sector === "banking") {
+                    if (isFieldVisible("car") && isFinite(v("car")) && v("car") < 12) { warnings.push("Low CAR: capital adequacy risk."); riskFactors++; }
+                    if (isFieldVisible("npl") && isFinite(v("npl")) && v("npl") > 12) { warnings.push("High NPL: asset quality risk."); riskFactors++; }
+                }
+                if (sector === "power") {
+                    if (isFieldVisible("receivableDays") && isFinite(v("receivableDays")) && v("receivableDays") > 240) { warnings.push("Receivable days extremely high: circular debt / cashflow risk."); riskFactors++; }
+                    if (isFieldVisible("ocfCoverage") && isFinite(v("ocfCoverage")) && v("ocfCoverage") < 0.8) { warnings.push("OCF coverage weak: dividends may rely on non-cash sources."); riskFactors++; }
+                }
+                if (sector === "tech") {
+                    if (isFieldVisible("churn") && isFinite(v("churn")) && v("churn") > 7) { warnings.push("High churn: customer retention risk."); riskFactors++; }
+                }
+            }
+
+            let riskLevel = "MODERATE", riskColor = "var(--warning)";
+            if (riskFactors >= 4) { riskLevel = "HIGH"; riskColor = "var(--danger)"; }
+            else if (riskFactors >= 2) { riskLevel = "ELEVATED"; riskColor = "var(--warning)"; }
+            else if (riskFactors === 0) { riskLevel = "LOW"; riskColor = "var(--success)"; }
+
+            return { riskFactors, riskLevel, riskColor };
+        }
+
+        function buildVerdict(score, riskFactors, advOn) {
+            // Simple, professional rules
+            let verdict = "HOLD";
+            let color = "var(--warning)";
+            let summary = "Mixed signals — verify data, catalysts, and valuation context.";
+            let explanation = `Composite score ${score}/100 with ${riskFactors} risk flags detected.`;
+
+            if (score >= 82 && riskFactors <= 1) {
+                verdict = advOn ? "CONVICTION BUY" : "STRONG BUY";
+                color = "var(--success)";
+                summary = "Excellent fundamentals with strong risk controls. Suitable for long-term, risk-aware investors.";
+                explanation = `High-quality profile: score ${score}/100 with minimal risk flags.`;
+            } else if (score >= 68 && riskFactors <= 2) {
+                verdict = "BUY";
+                color = "var(--success)";
+                summary = "Solid fundamentals with acceptable risks. Prefer entries with margin of safety.";
+                explanation = `Score ${score}/100 indicates strong overall metrics with manageable risks.`;
+            } else if (score >= 52) {
+                verdict = advOn && riskFactors <= 1 ? "ACCUMULATION ZONE" : "HOLD";
+                color = "var(--warning)";
+                summary = "Balanced picture — hold if you understand the thesis; avoid blind new entries.";
+                explanation = `Moderate score ${score}/100; consider alternatives and confirm catalysts.`;
+            } else if (score >= 38) {
+                verdict = "CAUTIOUS HOLD";
+                color = "#f97316";
+                summary = "Below-average fundamentals with notable weaknesses — tighten risk management.";
+                explanation = `Score ${score}/100 suggests weak competitive strength or valuation support.`;
+            } else {
+                verdict = "SELL / AVOID";
+                color = "var(--danger)";
+                summary = "Multiple structural weaknesses detected — avoid unless you have strong contrarian insight.";
+                explanation = `Low score ${score}/100 with elevated risk indicators.`;
+            }
+
+            return { verdict, color, summary, explanation };
+        }
+
+        /***************************************************************
+         * 6) Rendering
+         ***************************************************************/
+        function renderReport(payload) {
+            const {
+                sector, advOn, finalScore, baseScore, advAdj,
+                confidence, risk, verdictObj, warnings
+            } = payload;
+
+            $("emptyState").classList.add("hidden");
+            $("reportContent").classList.remove("hidden");
+
+            // Header
+            const tkr = (text("ticker") || "N/A").toUpperCase();
+            $("r_ticker").textContent = tkr;
+            $("r_price").textContent = `PKR ${(isFinite(num("price")) ? num("price") : 0).toFixed(2)}`;
+            $("r_sector").textContent = sector === "other" ? "General" : sector.charAt(0).toUpperCase() + sector.slice(1);
+
+            $("r_score").textContent = finalScore;
+            $("r_score").style.color = verdictObj.color;
+
+            // Risk pill
+            $("r_riskText").textContent = `${risk.riskLevel} RISK`;
+            $("r_riskDot").style.background = risk.riskColor;
+            $("r_riskPill").style.borderColor = "rgba(255,255,255,.10)";
+
+            // Confidence pill (completeness-based)
+            const confPct = Math.round(clamp(confidence, 0, 1) * 100);
+            let confLabel = "CONF: MED", confColor = "var(--warning)";
+            if (confPct >= 80) { confLabel = "CONF: HIGH"; confColor = "var(--success)"; }
+            else if (confPct >= 55) { confLabel = "CONF: MED"; confColor = "var(--warning)"; }
+            else { confLabel = "CONF: LOW"; confColor = "var(--danger)"; }
+
+            $("r_confText").textContent = `${confLabel} (${confPct}%)`;
+            $("r_confDot").style.background = confColor;
+
+            // Verdict banner
+            $("r_verdict").textContent = verdictObj.verdict;
+            $("r_verdict").style.background = verdictObj.color;
+            $("r_verdict").style.color = (verdictObj.color.includes("warning") || verdictObj.color === "#f97316" || verdictObj.color.includes("success")) ? "#000" : "#fff";
+
+            // Summary + explanation
+            const advLine = advOn ? ` Advanced adjustment: ${advAdj >= 0 ? "+" : ""}${advAdj.toFixed(1)} points.` : "";
+            $("r_summary").textContent = verdictObj.summary + (advOn ? ` (Base: ${baseScore}/100.${advLine})` : ` (Score: ${finalScore}/100.)`);
+            $("r_explanation").textContent =
+                `${verdictObj.explanation} Data confidence: ${confPct}%.` +
+                (advOn ? ` Advanced Mode enabled: sector-specific metrics refine conviction and risk.` : ` Advanced Mode off: score based on core fundamentals only.`);
+
+            // Warnings
+            if (warnings.length) {
+                $("warningBox").classList.remove("hidden");
+                $("warningList").innerHTML = warnings.map(w => `<li>${escapeHtml(w)}</li>`).join("");
+            } else {
+                $("warningBox").classList.add("hidden");
+                $("warningList").innerHTML = "";
+            }
+
+            // Core metric UI (show "--" if not applicable/visible)
+            renderMetric("r_pe", "pe", "", metricOk("pe"));
+            renderMetric("r_pb", "pb", "", metricOk("pb"));
+            renderMetric("r_bookVal", "bookValue", " PKR", metricOk("bookValue"));
+
+            renderMetric("r_roe", "roe", "%", metricOk("roe"));
+            renderMetric("r_roa", "roa", "%", metricOk("roa"));
+            renderMetric("r_netMargin", "netMargin", "%", metricOk("netMargin"));
+            renderMetric("r_eps", "eps", " PKR", metricOk("eps"));
+
+            renderMetric("r_debt", "debtEquity", "", metricOk("debtEquity"));
+            renderMetric("r_current", "currentRatio", "", metricOk("currentRatio"));
+            renderMetric("r_interest", "interestCoverage", "x", metricOk("interestCoverage"));
+
+            renderMetric("r_revG1", "revGrowth1y", "%", metricOk("revGrowth1y"));
+            renderMetric("r_revG5", "revGrowth5y", "%", metricOk("revGrowth5y"));
+            renderMetric("r_epsG1", "epsGrowth1y", "%", metricOk("epsGrowth1y"));
+            renderMetric("r_epsG5", "epsGrowth5y", "%", metricOk("epsGrowth5y"));
+
+            $("r_yield").textContent = (metricOk("divYield") ? num("divYield").toFixed(2) : "--") + "%";
+            renderMetric("r_payout", "payoutRatio", "%", metricOk("payoutRatio"));
+            renderMetric("r_fcf", "fcfPerShare", " PKR", metricOk("fcfPerShare"));
+
+            // Advanced card lines
+            if (advOn) {
+                const sectorSchema = SECTOR_SCHEMA[sector] || SECTOR_SCHEMA.other;
+                const advFields = sectorSchema.advanced || [];
+                const lines = advFields.map(id => {
+                    const label = friendlyLabel(id);
+                    const value = metricOk(id) ? formatValue(id) : "--";
+                    const ok = metricOk(id) ? metricPassColor(sector, id) : "#666";
+                    return `
+            <div class="metric-line" style="border:1px solid rgba(255,255,255,.06); border-radius:10px; padding:12px 12px; margin:0;">
+              <span class="m-key">${escapeHtml(label)}</span>
+              <span class="m-val">${escapeHtml(value)}<span class="status-dot" style="background:${ok}"></span></span>
+            </div>
+          `;
+                }).join("");
+
+                $("r_advLines").innerHTML = lines || `<div style="color:var(--text-secondary);">No advanced metrics configured for this sector.</div>`;
+            } else {
+                $("r_advLines").innerHTML = "";
+            }
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function metricOk(fieldId) {
+            return isFieldVisible(fieldId) && isFinite(num(fieldId));
+        }
+
+        function renderMetric(outId, fieldId, suffix, showDot) {
+            const el = $(outId);
+            if (!el) return;
+
+            if (!isFieldVisible(fieldId)) {
+                el.innerHTML = `--`;
+                return;
+            }
+
+            const v = num(fieldId);
+            if (!isFinite(v)) {
+                el.innerHTML = `--`;
+                return;
+            }
+
+            const val = `${v.toFixed(2)}${suffix}`;
+            if (!showDot) {
+                el.innerHTML = val;
+                return;
+            }
+
+            const color = metricPassColor(currentSector(), fieldId);
+            el.innerHTML = `${val}<span class="status-dot" style="background:${color}"></span>`;
+        }
+
+        function metricPassColor(sector, fieldId) {
+            const bench = sectorBench(sector);
+            const cfg = bench[fieldId] || BENCH.default[fieldId];
+            if (!cfg) return "var(--warning)";
+
+            const v = num(fieldId);
+            const s = computeMetricScore(fieldId, cfg, v);
+            if (s === null) return "#666";
+
+            // map score to color
+            if (s >= 0.70) return "var(--success)";
+            if (s >= 0.45) return "var(--warning)";
+            return "var(--danger)";
+        }
+
+        function friendlyLabel(id) {
+            const map = {
+                car: "CAR (Capital Adequacy %)",
+                npl: "NPL (%)",
+                nim: "NIM (%)",
+                costIncome: "Cost-to-Income (%)",
+                receivableDays: "Receivable Days",
+                ocfCoverage: "OCF Coverage",
+                payoutSustain: "Payout Sustainability",
+                capacityUtil: "Capacity Utilization (%)",
+                fuelSensitivity: "Fuel Sensitivity (0–100)",
+                arpuGrowth: "ARPU Growth (%)",
+                churn: "Churn (%)",
+                capexSales: "Capex/Sales (%)",
+                exportExposure: "Export Exposure (%)",
+                fxExposure: "FX Exposure (%)",
+                workingCapitalDays: "Working Capital Days",
+                localizationRate: "Localization Rate (%)",
+                inventoryDays: "Inventory Days"
+            };
+            return map[id] || id;
+        }
+
+        function formatValue(id) {
+            const v = num(id);
+            if (!isFinite(v)) return "--";
+            const suffixMap = {
+                car: "%", npl: "%", nim: "%", costIncome: "%",
+                receivableDays: "", ocfCoverage: "x", payoutSustain: "",
+                capacityUtil: "%", fuelSensitivity: "",
+                arpuGrowth: "%", churn: "%",
+                capexSales: "%", exportExposure: "%", fxExposure: "%",
+                workingCapitalDays: "", localizationRate: "%", inventoryDays: ""
+            };
+            const sfx = suffixMap[id] ?? "";
+            if (sfx === "x") return `${v.toFixed(2)}x`;
+            if (sfx === "%") return `${v.toFixed(2)}%`;
+            return `${v.toFixed(2)}${sfx}`;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
         }
     </script>
 </body>
